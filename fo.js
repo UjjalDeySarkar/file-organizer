@@ -1,3 +1,5 @@
+const fs = require('fs')
+const path =require('path')
 let input = process.argv.slice(2)
 // console.log(input)  //nodejs treats commandline input as array
 
@@ -8,7 +10,7 @@ switch(command){
         treeFn();
         break;
     case 'organize':
-        organizeFn();
+        organizeFn(input[1]);
         break;
     case 'help':
         helpFn();
@@ -21,8 +23,28 @@ function treeFn(){
 console.log("tree fn implemented")
 }
 
-function organizeFn(){
-    console.log("organize fn implemented")
+function organizeFn(dirPath){
+    
+    if (dirPath == undefined){
+        console.log("Please enter a Directory Path")
+        return;
+    } else{
+        let doseExist = fs.existsSync(dirPath)
+        // console.log(doseExist)
+        if(doseExist){
+            destPath = path.join(dirPath, 'organized_files')
+
+            if(fs.existsSync(destPath)==false){
+                fs.mkdirSync(destPath)
+            } else{
+                console.log("The file path already exists")
+            }
+
+        }else{
+            console.log("Please enter a valid path")
+        }
+    }
+
 }
 
 function helpFn(){
