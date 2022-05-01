@@ -5,6 +5,14 @@ let input = process.argv.slice(2)
 
 let command = input[0]
 
+let types = {
+    media : ['mp4', 'mkv', 'mp3'],
+    archives : ['zip', 'rar', 'iso'],
+    documents : ['pdf', 'txt'],
+    app : ['exe', 'pkg', 'dmg', 'deb'],
+    image : ['jpg', 'jpeg', 'png', 'bmp']
+}
+
 switch(command){
     case 'tree':
         treeFn();
@@ -44,8 +52,42 @@ function organizeFn(dirPath){
             console.log("Please enter a valid path")
         }
     }
-
+    organizeHelper(dirPath)
 }
+
+function organizeHelper(src, dest){
+    let childName = fs.readdirSync(src)
+    // console.log(childName)
+    for(let i=0; i<childName.length ; i++){
+        let childAddress = path.join(src, childName[i])
+        let isFile = fs.lstatSync(childAddress).isFile()
+
+        if(isFile){
+                let fileCategory = getCategory(childName[i])
+                console.log(childName[i]+" Belongs to "+fileCategory)
+        }
+    }
+}
+
+function getCategory(name){
+    let ext = path.extname(name)
+    // console.log(ext)
+    ext = ext.slice(1)
+    // console.log(ext)
+
+    for (let type in types){
+        let cTypeArr = types[type]
+        // console.log(cTypeArr)
+
+        for (let i=0; i<cTypeArr.length; i++){
+            if(ext == cTypeArr[i]){
+                return type
+            }
+        }
+
+    }
+}
+
 
 function helpFn(){
     console.log(`List of all commands - 
