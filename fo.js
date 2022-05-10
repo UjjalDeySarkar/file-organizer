@@ -52,7 +52,7 @@ function organizeFn(dirPath){
             console.log("Please enter a valid path")
         }
     }
-    organizeHelper(dirPath)
+    organizeHelper(dirPath, destPath)
 }
 
 function organizeHelper(src, dest){
@@ -63,8 +63,10 @@ function organizeHelper(src, dest){
         let isFile = fs.lstatSync(childAddress).isFile()
 
         if(isFile){
-                let fileCategory = getCategory(childName[i])
-                console.log(childName[i]+" Belongs to "+fileCategory)
+            let fileCategory = getCategory(childName[i])
+            // console.log(childName[i]+" Belongs to "+fileCategory)
+
+            sendFiles(childAddress, dest, fileCategory)
         }
     }
 }
@@ -86,8 +88,22 @@ function getCategory(name){
         }
 
     }
+    return "others"
 }
 
+function sendFiles(scrfilePath, dest, fileCategory){
+    let catPath = path.join(dest, fileCategory)
+
+    if(fs.existsSync(catPath) == false){
+        fs.mkdirSync(catPath)
+    }
+
+    let fileName = path.basename(scrfilePath)
+    let destFilePath = path.join(catPath, fileName)
+    fs.copyFileSync(scrfilePath, destFilePath)
+
+    console.log(fileName +" Copyed to "+ fileCategory)
+}
 
 function helpFn(){
     console.log(`List of all commands - 
