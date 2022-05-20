@@ -91,6 +91,8 @@ function getCategory(name){
     return "others"
 }
 
+
+
 function sendFiles(scrfilePath, dest, fileCategory){
     let catPath = path.join(dest, fileCategory)
 
@@ -101,6 +103,8 @@ function sendFiles(scrfilePath, dest, fileCategory){
     let fileName = path.basename(scrfilePath)
     let destFilePath = path.join(catPath, fileName)
     fs.copyFileSync(scrfilePath, destFilePath)
+
+    fs.unlinkSync(scrfilePath)
 
     console.log(fileName +" Copyed to "+ fileCategory)
 }
